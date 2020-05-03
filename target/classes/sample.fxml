@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sb.controller.Controller">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <CheckMenuItem fx:id="menuItemRegister" mnemonicParsing="false" onAction="#showRegisterPane" text="Register" />
+                  <MenuItem fx:id="menuItemLogin" mnemonicParsing="false" onAction="#showLoginPane" text="Login" />
+                  <CheckMenuItem fx:id="menuItemTask" mnemonicParsing="false" onAction="#showTaskPane" text="Task" />
+                  <CheckMenuItem fx:id="menuItemAllTasks" mnemonicParsing="false" onAction="#showAllTasksPane" text="All Tasks" />
+                  <CheckMenuItem fx:id="menuItemTaskList" mnemonicParsing="false" onAction="#showTaskListPane" text="TaskList" />
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane fx:id="tabPane" prefHeight="476.0" prefWidth="826.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="tabRegister" text="Register">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblUsernameRegister" layoutX="110.0" layoutY="67.0" text="Username" />
+                        <Label fx:id="lblPasswordRegister" layoutX="112.0" layoutY="105.0" text="Password" />
+                        <Label fx:id="lblConfirmPasswordRegister" layoutX="71.0" layoutY="149.0" text="Confirm password" />
+                        <TextField fx:id="txtFieldUsernameRegister" layoutX="212.0" layoutY="62.0" />
+                        <TextField fx:id="txtFieldPwdRegister" layoutX="212.0" layoutY="100.0" visible="false" />
+                        <TextField fx:id="txtFieldPwdConfirmRegister" layoutX="212.0" layoutY="144.0" visible="false" />
+                        <PasswordField fx:id="pwdFieldRegister" layoutX="212.0" layoutY="100.0" />
+                        <PasswordField fx:id="pwdFieldConfirmRegister" layoutX="212.0" layoutY="144.0" />
+                        <Button fx:id="btnShowPwdRegister" layoutX="442.0" layoutY="100.0" mnemonicParsing="false" onAction="#showPassword" text="Show" />
+                        <Button fx:id="btnShowConfirmRegister" layoutX="442.0" layoutY="144.0" mnemonicParsing="false" onAction="#showConfirmPassword" text="Show" />
+                        <Label fx:id="lblInformation" layoutX="131.0" layoutY="663.0" prefHeight="21.0" prefWidth="457.0" text="Label" visible="false" />
+                        <Button fx:id="btnRegister" layoutX="306.0" layoutY="211.0" mnemonicParsing="false" onAction="#registerUser" text="Register" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="tabLogin" text="Login">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblUsernameLogin" layoutX="91.0" layoutY="79.0" text="Username" />
+                        <Label layoutX="91.0" layoutY="120.0" text="Password" />
+                        <TextField fx:id="txtFieldUsernameLogin" layoutX="186.0" layoutY="74.0" />
+                        <TextField fx:id="txtFieldPwdLogin" layoutX="186.0" layoutY="115.0" visible="false" />
+                        <PasswordField fx:id="pwdFieldLogin" layoutX="186.0" layoutY="115.0" />
+                        <Button fx:id="btnLogin" layoutX="310.0" layoutY="159.0" mnemonicParsing="false" onAction="#loginUser" text="Login" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tabAddTask" text="Task">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="30.0" layoutY="31.0" text="TODO" textFill="#170503" />
+                        <TextField fx:id="txtFieldTODO" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                        <Button fx:id="btnInsert" layoutX="687.0" layoutY="26.0" mnemonicParsing="false" onAction="#insertTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
+                        <ScrollPane layoutX="14.0" layoutY="68.0">
+                           <content>
+                              <VBox fx:id="vBoxTasks" prefHeight="648.0" prefWidth="671.0" />
+                           </content>
+                        </ScrollPane>
+                        <Button fx:id="btnSubTask" layoutX="702.0" layoutY="87.0" mnemonicParsing="false" onAction="#loadSubTask" text="SubTask" />
+                     </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+          <Tab fx:id="tabShowTasks" onSelectionChanged="#loadTasks" text="All Tasks">
+               <content>
+                  <TableView fx:id="tblView" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="colTaskId" prefWidth="205.0" text="Task id" />
+                      <TableColumn fx:id="colTaskDesc" minWidth="0.0" prefWidth="305.0" text="Description" />
+                        <TableColumn fx:id="colUsername" prefWidth="290.0" text="Username" />
+                    </columns>
+                  </TableView>
+               </content></Tab>
+            <Tab fx:id="tabTasks" onSelectionChanged="#loadTaskList" text="Task List">
+               <content>
+                  <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0">
+                     <items>
+                        <ScrollPane>
+                           <content>
+                              <VBox fx:id="vBoxTaskList" prefHeight="800.0" prefWidth="400.0" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane>
+                           <content>
+                              <VBox fx:id="vBoxTaskAllocated" prefHeight="800.0" prefWidth="400.0" />
+                           </content>
+                        </ScrollPane>
+                     </items>
+                  </SplitPane>
+               </content></Tab>
+            <Tab fx:id="tabTasks2" onSelectionChanged="#loadTaskListInProgress" text="Task List In Progress">
+                <content>
+                    <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0">
+                        <items>
+                            <ScrollPane>
+                                <content>
+                                    <VBox fx:id="vBoxTaskInProgress" prefHeight="750.0" prefWidth="400.0" />
+                                </content>
+                            </ScrollPane>
+                            <ScrollPane>
+                                <content>
+                                    <VBox fx:id="vBoxTaskDone" prefHeight="800.0" prefWidth="400.0" />
+                                </content>
+                            </ScrollPane>
+                        </items>
+                    </SplitPane>
+                </content></Tab>
+            <Tab fx:id="tabSubTask" text="SubTask">
+                <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                 <children>
+                <Label layoutX="30.0" layoutY="31.0" text="TODO" textFill="#170503" />
+                <TextField fx:id="txtFieldTODOSubtask" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                <Button fx:id="btnInsertsubtask" layoutX="676.0" layoutY="26.0" mnemonicParsing="false" onAction="#insertSubTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
+                <ScrollPane layoutX="14.0" layoutY="68.0" prefHeight="647.0" prefWidth="755.0">
+                    <content>
+                        <VBox fx:id="vBoxSubTask" prefHeight="800.0" prefWidth="734.0" />
+                    </content>
+                </ScrollPane>
+                 </children>
+                </AnchorPane>
+                </content>
+            </Tab>
+            <Tab fx:id="tabShowSubTasks" onSelectionChanged="#loadSubTasks" text="All SubTasks">
+                <content>
+                    <TableView fx:id="tblViewSubTask" prefHeight="200.0" prefWidth="200.0">
+                        <columns>
+                            <TableColumn fx:id="colSubTaskId" prefWidth="205.0" text="SubTask id" />
+                            <TableColumn fx:id="colSubTaskDesc" minWidth="0.0" prefWidth="305.0" text="Description" />
+                            <TableColumn fx:id="colTask" prefWidth="290.0" text="Task" />
+                        </columns>
+                    </TableView>
+                </content></Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
