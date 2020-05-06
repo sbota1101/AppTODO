@@ -1,5 +1,6 @@
 package com.sb.controller;
 
+import com.sb.model.Project;
 import com.sb.model.SubTask;
 import com.sb.model.Task;
 import com.sb.model.User;
@@ -80,6 +81,19 @@ public class Controller {
     public TableColumn colTask;
     public TableColumn colSubTaskDesc;
     public TableColumn colSubTaskId;
+    public Button btnlogin;
+    public Button btnregister;
+    public Tab tabAddProject;
+    public Button btnInsertProject;
+    public TextField txtFieldProject;
+    public VBox vBoxProjects;
+    public CheckMenuItem menuItemProject;
+    public Tab tabShowProjects;
+    public TableView tblViewProject;
+    public TableColumn colTasks;
+    public TableColumn colUser;
+    public TableColumn colProjectName;
+    public TableColumn colProjectId;
 
 
     @FXML
@@ -103,6 +117,10 @@ public class Controller {
             colSubTaskId.setCellValueFactory(new PropertyValueFactory<SubTask, Integer>("id"));
             colSubTaskDesc.setCellValueFactory(new PropertyValueFactory<SubTask, String>("description"));
             colTask.setCellValueFactory(new PropertyValueFactory<SubTask, String>("task"));
+            colProjectId.setCellValueFactory(new PropertyValueFactory<Project, Integer>("project_id"));
+            colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("name"));
+            colUser.setCellValueFactory(new PropertyValueFactory<Task, String>("users"));
+            colTasks.setCellValueFactory(new PropertyValueFactory<Task, String>("tasks"));
             persistenceConnection();
         } catch (Exception e) {
             System.out.println("Connection is not allowed");
@@ -172,6 +190,8 @@ public class Controller {
         loggedInUser = userRepository.findByUsername(txtFieldUsernameLogin.getText());
         if (loggedInUser != null) {
             tabPane.getTabs().clear();
+            tabPane.getTabs().add(tabAddProject);
+            tabPane.getTabs().add(tabShowProjects);
             tabPane.getTabs().add(tabAddTask);
             //tabPane.getTabs().add(tabShowTasks);
             tabPane.getTabs().add(tabTasks);
@@ -220,6 +240,11 @@ public class Controller {
     public void showLoginPane(ActionEvent actionEvent) {
         tabPane.getTabs().add(tabLogin);
     }
+    public void showProjectPane(ActionEvent actionEvent) {
+        tabPane.getTabs().add(tabAddProject);
+        tabPane.getTabs().add(tabShowProjects);
+    }
+
 
     public void showTaskPane(ActionEvent actionEvent) {
         tabPane.getTabs().add(tabAddTask);
@@ -229,16 +254,24 @@ public class Controller {
         tabPane.getTabs().add(tabShowTasks);
     }
 
-    public void showTaskListPane(ActionEvent actionEvent) {
-        tabPane.getTabs().add(tabTasks);
-        tabPane.getTabs().add(tabShowSubTasks);
-    }
 
     public void insertTaskEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            insertProject();
             insertTask();
             insertSubTask();
         }
+    }
+    private void insertProject() {
+        Project project = new Project();
+        //project.setCreatedAt(new Date());
+        project.setName(txtFieldProject.getText());
+        projectRepository.save(project);
+        txtFieldProject.clear();
+        CheckBox checkBox = new CheckBox();
+        checkBox.setText(project.getName());
+        vBoxProjects.getChildren().add(checkBox);
+
     }
 
     private void insertTask() {
@@ -263,6 +296,10 @@ public class Controller {
         vBoxSubTask.getChildren().add(checkBox);
     }
 
+    public void insertProject(ActionEvent actionEvent) {
+        insertProject();
+    }
+
     public void insertSubTask(ActionEvent actionEvent) {
         insertSubTask();
     }
@@ -276,10 +313,16 @@ public class Controller {
         tabPane.getTabs().add(tabShowSubTasks);
 
        // Task task=new Task();
-        //task.setSubTasks(subTaskRepository.findAll());
+        //task.setSubTasks(subTaskRepository.findAll();
 
     }
-
+    public void loadProjects(Event event) {
+        vBoxProjects.getChildren().clear();
+        List<Project>projects=projectRepository.findAll();
+        final ObservableList<Project>dbProjects=FXCollections.observableList(projects);
+        tblViewProject.setItems(dbProjects);
+        System.out.println("Loaded Projects");
+    }
     public void loadTasks(Event event) {
         vBoxTasks.getChildren().clear();
         List<Task> tasks = taskRepository.findAll();
@@ -340,6 +383,19 @@ public class Controller {
 
 
     }
+
+
+    public void gotoLogin(ActionEvent actionEvent) {
+        tabPane.getTabs().clear();
+        tabPane.getTabs().add(tabLogin);
+    }
+
+    public void goToRegister(ActionEvent actionEvent) {
+        tabPane.getTabs().clear();
+        tabPane.getTabs().add(tabRegister);
+    }
+
+
 
 
 }

@@ -26,9 +26,9 @@
             <items>
                   <CheckMenuItem fx:id="menuItemRegister" mnemonicParsing="false" onAction="#showRegisterPane" text="Register" />
                   <MenuItem fx:id="menuItemLogin" mnemonicParsing="false" onAction="#showLoginPane" text="Login" />
+                  <CheckMenuItem fx:id="menuItemProject" mnemonicParsing="false" onAction="#showProjectPane" text="Project" />
                   <CheckMenuItem fx:id="menuItemTask" mnemonicParsing="false" onAction="#showTaskPane" text="Task" />
                   <CheckMenuItem fx:id="menuItemAllTasks" mnemonicParsing="false" onAction="#showAllTasksPane" text="All Tasks" />
-                  <CheckMenuItem fx:id="menuItemTaskList" mnemonicParsing="false" onAction="#showTaskListPane" text="TaskList" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
@@ -64,6 +64,7 @@
                         <Button fx:id="btnShowConfirmRegister" layoutX="442.0" layoutY="144.0" mnemonicParsing="false" onAction="#showConfirmPassword" text="Show" />
                         <Label fx:id="lblInformation" layoutX="131.0" layoutY="663.0" prefHeight="21.0" prefWidth="457.0" text="Label" visible="false" />
                         <Button fx:id="btnRegister" layoutX="306.0" layoutY="211.0" mnemonicParsing="false" onAction="#registerUser" text="Register" />
+                        <Button fx:id="btnlogin" layoutX="339.0" layoutY="349.0" mnemonicParsing="false" onAction="#gotoLogin" prefHeight="31.0" prefWidth="160.0" text="Go to Login" />
                      </children>
                   </AnchorPane>
             </content>
@@ -78,10 +79,38 @@
                         <TextField fx:id="txtFieldPwdLogin" layoutX="186.0" layoutY="115.0" visible="false" />
                         <PasswordField fx:id="pwdFieldLogin" layoutX="186.0" layoutY="115.0" />
                         <Button fx:id="btnLogin" layoutX="310.0" layoutY="159.0" mnemonicParsing="false" onAction="#loginUser" text="Login" />
+                        <Button fx:id="btnregister" layoutX="293.0" layoutY="315.0" mnemonicParsing="false" onAction="#goToRegister" prefHeight="31.0" prefWidth="215.0" text="Go to Register" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
+            <Tab fx:id="tabAddProject" text="Project">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <Label layoutX="30.0" layoutY="31.0" text="TODO" textFill="#170503" />
+                            <TextField fx:id="txtFieldProject" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                            <Button fx:id="btnInsertProject" layoutX="687.0" layoutY="26.0" mnemonicParsing="false" onAction="#insertProject" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
+                            <ScrollPane layoutX="14.0" layoutY="68.0">
+                                <content>
+                                    <VBox fx:id="vBoxProjects" prefHeight="611.0" prefWidth="721.0" />
+                                </content>
+                            </ScrollPane>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+            <Tab fx:id="tabShowProjects" onSelectionChanged="#loadProjects" text="All Projects">
+                <content>
+                    <TableView fx:id="tblViewProject" prefHeight="200.0" prefWidth="200.0">
+                        <columns>
+                            <TableColumn fx:id="colProjectId" prefWidth="140.0" text="Project id" />
+                            <TableColumn fx:id="colProjectName" minWidth="0.0" prefWidth="230.0" text="Project Name" />
+                            <TableColumn fx:id="colUser" minWidth="0.0" prefWidth="229.0" text="Username" />
+                        <TableColumn fx:id="colTasks" prefWidth="201.0" text="Task" />
+                        </columns>
+                    </TableView>
+                </content></Tab>
             <Tab fx:id="tabAddTask" text="Task">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
