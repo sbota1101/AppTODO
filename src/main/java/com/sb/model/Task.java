@@ -1,6 +1,7 @@
 package com.sb.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class Task {
     @ManyToOne
     private Project project;
 
+
+   // private Boolean TaskDone;
     @Column(name = "created_at")
     private Date createdAt;
     @Column(name = "in_progress")
@@ -88,9 +91,17 @@ public class Task {
 
 
     public void setCreatedAt(Date date) {
-        this.createdAt = createdAt;
+        this.createdAt = date;
     }
 
+  /*  public Boolean getTaskDone() {
+        return TaskDone;
+    }
+
+    public void setTaskDone(Boolean taskDone) {
+        TaskDone = taskDone;
+    }
+*/
     @Override
     public String toString() {
         return this.description;

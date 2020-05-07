@@ -240,6 +240,7 @@ public class Controller {
     public void showLoginPane(ActionEvent actionEvent) {
         tabPane.getTabs().add(tabLogin);
     }
+
     public void showProjectPane(ActionEvent actionEvent) {
         tabPane.getTabs().add(tabAddProject);
         tabPane.getTabs().add(tabShowProjects);
@@ -262,9 +263,10 @@ public class Controller {
             insertSubTask();
         }
     }
+
     private void insertProject() {
         Project project = new Project();
-        //project.setCreatedAt(new Date());
+        project.setCreatedAt(new Date());
         project.setName(txtFieldProject.getText());
         projectRepository.save(project);
         txtFieldProject.clear();
@@ -311,18 +313,16 @@ public class Controller {
     public void loadSubTask(Event actionEvent) {
         tabPane.getTabs().add(tabSubTask);
         tabPane.getTabs().add(tabShowSubTasks);
+           }
 
-       // Task task=new Task();
-        //task.setSubTasks(subTaskRepository.findAll();
-
-    }
     public void loadProjects(Event event) {
         vBoxProjects.getChildren().clear();
-        List<Project>projects=projectRepository.findAll();
-        final ObservableList<Project>dbProjects=FXCollections.observableList(projects);
+        List<Project> projects = projectRepository.findAll();
+        final ObservableList<Project> dbProjects = FXCollections.observableList(projects);
         tblViewProject.setItems(dbProjects);
         System.out.println("Loaded Projects");
     }
+
     public void loadTasks(Event event) {
         vBoxTasks.getChildren().clear();
         List<Task> tasks = taskRepository.findAll();
@@ -366,22 +366,24 @@ public class Controller {
 
         }
     }
-
     public void loadTaskListInProgress(Event event) {
         vBoxTaskAllocated.getChildren().clear();
         vBoxTaskInProgress.getChildren().clear();
         List<Task> tasks = taskRepository.findAll();
         for (Task task : tasks) {
-            CheckBox checkBox = new CheckBox(task.getDescription() + "is in progress");
-          //  checkBox.setSelected(!task.isInProgress());
-            vBoxTaskDone.getChildren().add(checkBox);
+            task.setInProgress(false);
+            CheckBox checkBox = new CheckBox(task.getDescription() + " " + "is in progress");
             checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 task.setInProgress(!newValue);
+                vBoxTaskInProgress.getChildren().remove(checkBox);
+                CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
+                vBoxTaskDone.getChildren().add(checkBox1);
+                task.setInProgress(true);
+
             });
             vBoxTaskInProgress.getChildren().add(checkBox);
+
         }
-
-
     }
 
 
@@ -394,8 +396,6 @@ public class Controller {
         tabPane.getTabs().clear();
         tabPane.getTabs().add(tabRegister);
     }
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.sb.model;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,7 +11,8 @@ public class Project {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int project_id;
     private String name;
-
+    @Column(name = "created_at")
+    private Date createdAt;
     @ManyToMany(mappedBy = "projects")
     private List<User> users;
 
@@ -49,5 +51,13 @@ public class Project {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

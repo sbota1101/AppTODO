@@ -15,17 +15,18 @@ public class User {
     private String username;
     private String password;
 
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-   @ManyToMany
-   @JoinTable(name = "working_project",
-          joinColumns = @JoinColumn(name = "user_id"), //current entity->user
-          inverseJoinColumns = @JoinColumn(name = "project_id")) //foreign key->project
+    @ManyToMany
+    @JoinTable(name = "working_project",
+            joinColumns = @JoinColumn(name = "user_id"), //current entity->user
+            inverseJoinColumns = @JoinColumn(name = "project_id")) //foreign key->project
     private List<Project> projects;
 
-   @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user")
     private PendingUser pendingUser;
+    private boolean isAdmin;
 
     public User() {
 
@@ -77,6 +78,14 @@ public class User {
 
     public void setPendingUser(PendingUser pendingUser) {
         this.pendingUser = pendingUser;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     @Override
