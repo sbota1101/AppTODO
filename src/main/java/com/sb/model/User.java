@@ -26,7 +26,7 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private PendingUser pendingUser;
-    private boolean isAdmin;
+
 
     public User() {
 
@@ -80,13 +80,6 @@ public class User {
         this.pendingUser = pendingUser;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 
     @Override
     public String toString() {

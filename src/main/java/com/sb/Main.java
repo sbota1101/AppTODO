@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import java.io.InputStream;
 
@@ -17,6 +18,7 @@ public class Main extends Application {
         primaryStage.setTitle("TO DO App");
         primaryStage.setScene(new Scene(root, 800, 800));
         primaryStage.show();
+      
     }
 
 

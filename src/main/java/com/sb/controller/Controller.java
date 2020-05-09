@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -94,6 +95,8 @@ public class Controller {
     public TableColumn colUser;
     public TableColumn colProjectName;
     public TableColumn colProjectId;
+    public CheckBox checkDev;
+    public CheckBox checkAdmin;
 
 
     @FXML
@@ -128,7 +131,7 @@ public class Controller {
             e.printStackTrace();
         }
         tabPane.getTabs().clear();
-        //tabPane.getTabs().add(tabRegister);
+        tabPane.getTabs().add(tabRegister);
         tabPane.getTabs().add(tabLogin);
     }
 
@@ -255,11 +258,20 @@ public class Controller {
         tabPane.getTabs().add(tabShowTasks);
     }
 
+    public void insertProjectEnter(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            insertProject();
+        }
+    }
 
     public void insertTaskEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-            insertProject();
             insertTask();
+        }
+    }
+
+    public void insertSubTaskEnter(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             insertSubTask();
         }
     }
@@ -313,7 +325,7 @@ public class Controller {
     public void loadSubTask(Event actionEvent) {
         tabPane.getTabs().add(tabSubTask);
         tabPane.getTabs().add(tabShowSubTasks);
-           }
+    }
 
     public void loadProjects(Event event) {
         vBoxProjects.getChildren().clear();
@@ -350,7 +362,7 @@ public class Controller {
                 checkBox.setText(task.getId() + " " + task.getDescription() + " " + "allocated to" + " " + task.getUser().getUsername());
                 checkBox.setDisable(true);
                 vBoxTaskAllocated.getChildren().add(checkBox);
-                task.setInProgress(true);
+                // task.setInProgress(true);
             } else {
                 vBoxTaskList.getChildren().add(checkBox);
                 checkBox.setText(task.getId() + ". "
@@ -366,6 +378,7 @@ public class Controller {
 
         }
     }
+
     public void loadTaskListInProgress(Event event) {
         vBoxTaskAllocated.getChildren().clear();
         vBoxTaskInProgress.getChildren().clear();
@@ -379,13 +392,24 @@ public class Controller {
                 CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
                 vBoxTaskDone.getChildren().add(checkBox1);
                 task.setInProgress(true);
-
             });
             vBoxTaskInProgress.getChildren().add(checkBox);
 
         }
     }
 
+    public void deleteTask(MouseEvent mouseEvent) {
+        vBoxTaskAllocated.getChildren().clear();
+        vBoxTaskInProgress.getChildren().clear();
+        List<Task> tasks = taskRepository.findAll();
+        for (Task task : tasks) {
+            CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
+            vBoxTaskDone.getChildren().add(checkBox1);
+            if (checkBox1.isSelected()) {
+                taskRepository.deleteById(task.getId());
+            }
+        }
+    }
 
     public void gotoLogin(ActionEvent actionEvent) {
         tabPane.getTabs().clear();
@@ -398,6 +422,16 @@ public class Controller {
     }
 
 
+    public void developer(ActionEvent actionEvent) {
+        if (checkDev.isSelected())
+            btnInsertProject.setDisable(true);
+
+    }
+
+    public void admin(ActionEvent actionEvent) {
+        if (checkAdmin.isSelected())
+            tabPane.getTabs().add(tabLogin);
+    }
 }
 
 

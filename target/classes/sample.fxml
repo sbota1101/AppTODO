@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -65,6 +66,8 @@
                         <Label fx:id="lblInformation" layoutX="131.0" layoutY="663.0" prefHeight="21.0" prefWidth="457.0" text="Label" visible="false" />
                         <Button fx:id="btnRegister" layoutX="306.0" layoutY="211.0" mnemonicParsing="false" onAction="#registerUser" text="Register" />
                         <Button fx:id="btnlogin" layoutX="339.0" layoutY="349.0" mnemonicParsing="false" onAction="#gotoLogin" prefHeight="31.0" prefWidth="160.0" text="Go to Login" />
+                        <CheckBox fx:id="checkAdmin" layoutX="66.0" layoutY="250.0" mnemonicParsing="false" onAction="#admin" text="Administrator" />
+                        <CheckBox fx:id="checkDev" layoutX="66.0" layoutY="303.0" mnemonicParsing="false" onAction="#developer" text="Developer" />
                      </children>
                   </AnchorPane>
             </content>
@@ -89,7 +92,7 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
                             <Label layoutX="30.0" layoutY="31.0" text="TODO" textFill="#170503" />
-                            <TextField fx:id="txtFieldProject" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                            <TextField fx:id="txtFieldProject" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertProjectEnter" prefHeight="31.0" prefWidth="558.0" />
                             <Button fx:id="btnInsertProject" layoutX="687.0" layoutY="26.0" mnemonicParsing="false" onAction="#insertProject" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
                             <ScrollPane layoutX="14.0" layoutY="68.0">
                                 <content>
@@ -166,7 +169,7 @@
                             </ScrollPane>
                             <ScrollPane>
                                 <content>
-                                    <VBox fx:id="vBoxTaskDone" prefHeight="800.0" prefWidth="400.0" />
+                                    <VBox fx:id="vBoxTaskDone" onMouseClicked="#deleteTask" prefHeight="800.0" prefWidth="400.0" />
                                 </content>
                             </ScrollPane>
                         </items>
@@ -177,7 +180,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                  <children>
                 <Label layoutX="30.0" layoutY="31.0" text="TODO" textFill="#170503" />
-                <TextField fx:id="txtFieldTODOSubtask" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                <TextField fx:id="txtFieldTODOSubtask" layoutX="92.0" layoutY="26.0" onKeyReleased="#insertSubTaskEnter" prefHeight="31.0" prefWidth="558.0" />
                 <Button fx:id="btnInsertsubtask" layoutX="676.0" layoutY="26.0" mnemonicParsing="false" onAction="#insertSubTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
                 <ScrollPane layoutX="14.0" layoutY="68.0" prefHeight="647.0" prefWidth="755.0">
                     <content>
