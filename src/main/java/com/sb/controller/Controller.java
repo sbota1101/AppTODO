@@ -179,8 +179,8 @@ public class Controller {
                     pwdFieldConfirmRegister.clear();
                 }
                 //}
-                if ((checkAdmin.isSelected() & checkDev.isSelected())) {
-
+                if ((checkAdmin.isSelected() | checkDev.isSelected())) {
+                    tabPane.getTabs().add(tabLogin);
                 } else {
                     txtRolle.setVisible(true);
                     txtRolle.setTextFill(Color.RED);
