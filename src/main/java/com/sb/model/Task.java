@@ -27,7 +27,7 @@ public class Task {
     @Column(name = "created_at")
     private Date createdAt;
     @Column(name = "in_progress")
-    private Boolean inProgress;
+    private boolean inProgress;
 
     public Task() {
 

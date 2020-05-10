@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,6 +98,7 @@ public class Controller {
     public TableColumn colProjectId;
     public CheckBox checkDev;
     public CheckBox checkAdmin;
+    public ComboBox comboProject;
 
 
     @FXML
@@ -280,6 +282,14 @@ public class Controller {
         Project project = new Project();
         project.setCreatedAt(new Date());
         project.setName(txtFieldProject.getText());
+        List<User> users = project.getUsers();
+        if(users == null) {
+            users = new ArrayList<>();
+        }
+        if(!users.contains(loggedInUser)) {
+            users.add(loggedInUser);
+        }
+        project.setUsers(users);
         projectRepository.save(project);
         txtFieldProject.clear();
         CheckBox checkBox = new CheckBox();
@@ -292,6 +302,7 @@ public class Controller {
         Task task = new Task();
         task.setCreatedAt(new Date());
         task.setDescription(txtFieldTODO.getText());
+       // task.setProject();
         taskRepository.save(task);
         txtFieldTODO.clear();
         CheckBox checkBox = new CheckBox();
@@ -369,8 +380,8 @@ public class Controller {
                         + task.getDescription());
                 checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                     task.setUser(loggedInUser);
+                    task.setInProgress(true);
                     taskRepository.save(task);
-                    task.setInProgress(!newValue);
                     loadTaskList(null);
                 });
 
@@ -382,33 +393,50 @@ public class Controller {
     public void loadTaskListInProgress(Event event) {
         vBoxTaskAllocated.getChildren().clear();
         vBoxTaskInProgress.getChildren().clear();
+        vBoxTaskDone.getChildren().clear();
         List<Task> tasks = taskRepository.findAll();
         for (Task task : tasks) {
-            task.setInProgress(false);
-            CheckBox checkBox = new CheckBox(task.getDescription() + " " + "is in progress");
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                task.setInProgress(!newValue);
-                vBoxTaskInProgress.getChildren().remove(checkBox);
+            if(task.isInProgress()) {
+                CheckBox checkBox = new CheckBox(task.getDescription() + " " + "is in progress");
+                checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                    task.setInProgress(true);
+                    taskRepository.save(task);
+                    vBoxTaskInProgress.getChildren().remove(checkBox);
+                    CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
+                    vBoxTaskDone.getChildren().add(checkBox1);
+                    //task.setInProgress(true);
+                });
+
+                vBoxTaskInProgress.getChildren().add(checkBox);
+            }
+
+            else {
+
                 CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
-                vBoxTaskDone.getChildren().add(checkBox1);
-                task.setInProgress(true);
-            });
-            vBoxTaskInProgress.getChildren().add(checkBox);
+                vBoxTaskDone.getChildren().add(checkBox1); //TODO
+                checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
+
+                    vBoxTaskDone.getChildren().remove(checkBox1);
+
+                    taskRepository.deleteById(task.getId());
+                    //task.setInProgress(true);
+                });
+            }
 
         }
     }
 
     public void deleteTask(MouseEvent mouseEvent) {
-        vBoxTaskAllocated.getChildren().clear();
-        vBoxTaskInProgress.getChildren().clear();
-        List<Task> tasks = taskRepository.findAll();
-        for (Task task : tasks) {
-            CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
-            vBoxTaskDone.getChildren().add(checkBox1);
-            if (checkBox1.isSelected()) {
-                taskRepository.deleteById(task.getId());
-            }
-        }
+//        vBoxTaskAllocated.getChildren().clear();
+//        vBoxTaskInProgress.getChildren().clear();
+//        List<Task> tasks = taskRepository.findAll();
+//        for (Task task : tasks) {
+//            CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
+//            vBoxTaskDone.getChildren().add(checkBox1);
+//            if (checkBox1.isSelected()) {
+//                taskRepository.deleteById(task.getId());
+//            }
+//        }
     }
 
     public void gotoLogin(ActionEvent actionEvent) {
