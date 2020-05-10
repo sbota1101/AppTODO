@@ -99,6 +99,8 @@ public class Controller {
     public CheckBox checkDev;
     public CheckBox checkAdmin;
     public ComboBox comboProject;
+    public Label txtRolle;
+    public ComboBox comboTask;
 
 
     @FXML
@@ -156,7 +158,8 @@ public class Controller {
         //parola trebuie sa fie cu 4cifre dif la sfarsit si cu 3 litere la inceput
         String passwordPattern = "([a-zA-Z]+[0-9]...)";
 
-        if (pwdFieldRegister.getText().equals(pwdFieldConfirmRegister.getText()) && user == null) {
+        if (pwdFieldRegister.getText().equals(pwdFieldConfirmRegister.getText()) & user == null) {
+
             if (txtFieldUsernameRegister.getText().length() < 1) {
                 lblUsernameRegister.setTextFill(Color.RED);
                 lblInformation.setVisible(true);
@@ -175,14 +178,24 @@ public class Controller {
                     pwdFieldRegister.clear();
                     pwdFieldConfirmRegister.clear();
                 }
+                //}
+                if ((checkAdmin.isSelected() & checkDev.isSelected())) {
 
+                } else {
+                    txtRolle.setVisible(true);
+                    txtRolle.setTextFill(Color.RED);
+                    txtRolle.setText("Please choose role");
+                    tabPane.getTabs().clear();
+                }
             }
         } else {
+
             lblInformation.setVisible(true);
             lblInformation.setTextFill(Color.RED);
             lblInformation.setText("The user" + " " + txtFieldUsernameRegister.getText() + " is already registered");
             lblUsernameRegister.setTextFill(Color.BLACK);
         }
+
 
     }
 
@@ -283,10 +296,10 @@ public class Controller {
         project.setCreatedAt(new Date());
         project.setName(txtFieldProject.getText());
         List<User> users = project.getUsers();
-        if(users == null) {
+        if (users == null) {
             users = new ArrayList<>();
         }
-        if(!users.contains(loggedInUser)) {
+        if (!users.contains(loggedInUser)) {
             users.add(loggedInUser);
         }
         project.setUsers(users);
@@ -299,10 +312,12 @@ public class Controller {
     }
 
     private void insertTask() {
+        Project project = null;
         Task task = new Task();
         task.setCreatedAt(new Date());
         task.setDescription(txtFieldTODO.getText());
-       // task.setProject();
+//        project = projectRepository.findById(project.getProject_id());
+//        task.setProject(project);
         taskRepository.save(task);
         txtFieldTODO.clear();
         CheckBox checkBox = new CheckBox();
@@ -396,7 +411,7 @@ public class Controller {
         vBoxTaskDone.getChildren().clear();
         List<Task> tasks = taskRepository.findAll();
         for (Task task : tasks) {
-            if(task.isInProgress()) {
+            if (task.isInProgress()) {
                 CheckBox checkBox = new CheckBox(task.getDescription() + " " + "is in progress");
                 checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                     task.setInProgress(true);
@@ -404,22 +419,15 @@ public class Controller {
                     vBoxTaskInProgress.getChildren().remove(checkBox);
                     CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
                     vBoxTaskDone.getChildren().add(checkBox1);
-                    //task.setInProgress(true);
                 });
-
                 vBoxTaskInProgress.getChildren().add(checkBox);
-            }
-
-            else {
+            } else {
 
                 CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
-                vBoxTaskDone.getChildren().add(checkBox1); //TODO
+                vBoxTaskDone.getChildren().add(checkBox1);
                 checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
                     vBoxTaskDone.getChildren().remove(checkBox1);
-
                     taskRepository.deleteById(task.getId());
-                    //task.setInProgress(true);
                 });
             }
 
@@ -451,14 +459,16 @@ public class Controller {
 
 
     public void developer(ActionEvent actionEvent) {
-        if (checkDev.isSelected())
+        if (checkDev.isSelected()) {
+            checkAdmin.setSelected(false);
             btnInsertProject.setDisable(true);
-
+        }
     }
 
     public void admin(ActionEvent actionEvent) {
-        if (checkAdmin.isSelected())
-            tabPane.getTabs().add(tabLogin);
+        if (checkAdmin.isSelected()) {
+            checkDev.setSelected(false);
+        }
     }
 }
 

@@ -94,14 +94,7 @@ public class Task {
         this.createdAt = date;
     }
 
-  /*  public Boolean getTaskDone() {
-        return TaskDone;
-    }
 
-    public void setTaskDone(Boolean taskDone) {
-        TaskDone = taskDone;
-    }
-*/
     @Override
     public String toString() {
         return this.description;
