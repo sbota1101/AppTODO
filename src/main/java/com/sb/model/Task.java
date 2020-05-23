@@ -23,7 +23,7 @@ public class Task {
     private Project project;
 
 
-   // private Boolean TaskDone;
+   private Boolean TaskDone;
     @Column(name = "created_at")
     private Date createdAt;
     @Column(name = "in_progress")
@@ -94,6 +94,13 @@ public class Task {
         this.createdAt = date;
     }
 
+    public Boolean getTaskDone() {
+        return TaskDone;
+    }
+
+    public void setTaskDone(Boolean taskDone) {
+        TaskDone = taskDone;
+    }
 
     @Override
     public String toString() {

@@ -55,7 +55,6 @@ public class Controller {
     public PasswordField pwdFieldConfirmRegister;
     public PasswordField pwdFieldLogin;
     public TextField txtFieldPwdLogin;
-    public CheckMenuItem menuItemTask;
     public TextField txtFieldTODO;
     public VBox vBoxTasks;
     public Button btnInsert;
@@ -69,7 +68,6 @@ public class Controller {
     public Tab tabTasks;
     public VBox vBoxTaskList;
     public VBox vBoxTaskAllocated;
-    public CheckMenuItem menuItemTaskList;
     public Tab tabTasks2;
     public VBox vBoxTaskInProgress;
     public VBox vBoxTaskDone;
@@ -89,7 +87,6 @@ public class Controller {
     public Button btnInsertProject;
     public TextField txtFieldProject;
     public VBox vBoxProjects;
-    public CheckMenuItem menuItemProject;
     public Tab tabShowProjects;
     public TableView tblViewProject;
     public TableColumn colTasks;
@@ -98,9 +95,10 @@ public class Controller {
     public TableColumn colProjectId;
     public CheckBox checkDev;
     public CheckBox checkAdmin;
-    public ComboBox comboProject;
-    public Label txtRolle;
-    public ComboBox comboTask;
+    public ComboBox<Project> comboProject;
+    public ComboBox<Task> comboTask;
+    public CheckMenuItem menuAllProjects;
+    public CheckMenuItem menuAllSubtask;
 
 
     @FXML
@@ -178,13 +176,13 @@ public class Controller {
                     pwdFieldRegister.clear();
                     pwdFieldConfirmRegister.clear();
                 }
-                //}
+
                 if ((checkAdmin.isSelected() | checkDev.isSelected())) {
                     tabPane.getTabs().add(tabLogin);
                 } else {
-                    txtRolle.setVisible(true);
-                    txtRolle.setTextFill(Color.RED);
-                    txtRolle.setText("Please choose role");
+                    lblInformation.setVisible(true);
+                    lblInformation.setTextFill(Color.RED);
+                    lblInformation.setText("Please choose role");
                     tabPane.getTabs().clear();
                 }
             }
@@ -209,7 +207,7 @@ public class Controller {
         if (loggedInUser != null) {
             tabPane.getTabs().clear();
             tabPane.getTabs().add(tabAddProject);
-            tabPane.getTabs().add(tabShowProjects);
+            //tabPane.getTabs().add(tabShowProjects);
             tabPane.getTabs().add(tabAddTask);
             //tabPane.getTabs().add(tabShowTasks);
             tabPane.getTabs().add(tabTasks);
@@ -259,18 +257,16 @@ public class Controller {
         tabPane.getTabs().add(tabLogin);
     }
 
-    public void showProjectPane(ActionEvent actionEvent) {
-        tabPane.getTabs().add(tabAddProject);
+    public void showAllTasksPane(ActionEvent actionEvent) {
+        tabPane.getTabs().add(tabShowTasks);
+    }
+
+    public void loadAllProjects(ActionEvent actionEvent) {
         tabPane.getTabs().add(tabShowProjects);
     }
 
-
-    public void showTaskPane(ActionEvent actionEvent) {
-        tabPane.getTabs().add(tabAddTask);
-    }
-
-    public void showAllTasksPane(ActionEvent actionEvent) {
-        tabPane.getTabs().add(tabShowTasks);
+    public void loadAllSubtask(ActionEvent actionEvent) {
+        tabPane.getTabs().add(tabShowSubTasks);
     }
 
     public void insertProjectEnter(KeyEvent keyEvent) {
@@ -311,30 +307,69 @@ public class Controller {
 
     }
 
-    private void insertTask() {
-        Project project = null;
-        Task task = new Task();
-        task.setCreatedAt(new Date());
-        task.setDescription(txtFieldTODO.getText());
-//        project = projectRepository.findById(project.getProject_id());
-//        task.setProject(project);
-        taskRepository.save(task);
-        txtFieldTODO.clear();
-        CheckBox checkBox = new CheckBox();
-        checkBox.setText(task.getDescription());
-        vBoxTasks.getChildren().add(checkBox);
+    public ObservableList<Project> getProjectList() {
+        ObservableList<Project> projectList = FXCollections.observableList(projectRepository.findAll());
+        if (projectList == null)
+            return FXCollections.observableArrayList();
 
+        return projectList;
+    }
+
+    public void loadComboBoxProject(MouseEvent mouseEvent) {
+        ObservableList<Project> projectList = FXCollections.observableArrayList(projectRepository.findAll());
+        comboProject.setItems(projectList);
+    }
+
+    private void insertTask() {
+        Project project = comboProject.getValue();
+        if (txtFieldTODO.getText().length() > 1 && project != null) {
+            Task task = new Task();
+            task.setCreatedAt(new Date());
+            task.setDescription(txtFieldTODO.getText());
+            task.setProject(project);
+            taskRepository.save(task);
+            txtFieldTODO.clear();
+            CheckBox checkBox = new CheckBox();
+            checkBox.setText(task.getDescription());
+            vBoxTasks.getChildren().add(checkBox);
+        } else if (projectRepository == null) {
+            lblInformation.setVisible(true);
+            lblInformation.setTextFill(Color.RED);
+            lblInformation.setText("Please insert Project!");
+        }
+    }
+
+    public ObservableList<Task> getTaskList() {
+        ObservableList<Task> taskList = FXCollections.observableList(taskRepository.findAll());
+        if (taskList == null)
+            return FXCollections.observableArrayList();
+
+        return taskList;
+    }
+
+    public void loadComboBoxTask(MouseEvent mouseEvent) {
+        ObservableList<Task> tskList = FXCollections.observableArrayList(taskRepository.findAll());
+        comboTask.setItems(tskList);
     }
 
     private void insertSubTask() {
-        SubTask subTask = new SubTask();
-        subTask.setDescription(txtFieldTODOSubtask.getText());
-        subTaskRepository.save(subTask);
-        txtFieldTODOSubtask.clear();
-        CheckBox checkBox = new CheckBox();
-        checkBox.setText(subTask.getDescription());
-        vBoxSubTask.getChildren().add(checkBox);
+        Task task = comboTask.getValue();
+        if (txtFieldTODOSubtask.getText().length() > 1 && task != null) {
+            SubTask subTask = new SubTask();
+            subTask.setDescription(txtFieldTODOSubtask.getText());
+            subTask.setTask(task);
+            subTaskRepository.save(subTask);
+            txtFieldTODOSubtask.clear();
+            CheckBox checkBox = new CheckBox();
+            checkBox.setText(subTask.getDescription());
+            vBoxSubTask.getChildren().add(checkBox);
+        } else if (projectRepository == null) {
+            lblInformation.setVisible(true);
+            lblInformation.setTextFill(Color.RED);
+            lblInformation.setText("Please insert Project!");
+        }
     }
+
 
     public void insertProject(ActionEvent actionEvent) {
         insertProject();
@@ -350,7 +385,7 @@ public class Controller {
 
     public void loadSubTask(Event actionEvent) {
         tabPane.getTabs().add(tabSubTask);
-        tabPane.getTabs().add(tabShowSubTasks);
+        // tabPane.getTabs().add(tabShowSubTasks);
     }
 
     public void loadProjects(Event event) {
@@ -388,7 +423,6 @@ public class Controller {
                 checkBox.setText(task.getId() + " " + task.getDescription() + " " + "allocated to" + " " + task.getUser().getUsername());
                 checkBox.setDisable(true);
                 vBoxTaskAllocated.getChildren().add(checkBox);
-                // task.setInProgress(true);
             } else {
                 vBoxTaskList.getChildren().add(checkBox);
                 checkBox.setText(task.getId() + ". "
@@ -404,8 +438,26 @@ public class Controller {
 
         }
     }
+//    public void loadTaskListInProgress(Event event) {
+//        vBoxTaskInProgress.getChildren().clear();
+//        vBoxTaskDone.getChildren().clear();
+//        List<Task> tasks = taskRepository.findAll();
+//        for (Task task : tasks) {CheckBox checkBox = new CheckBox(task.getId() + ". " + task.getDescription() + " in progress");
+//            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+//                task.setInProgress(false);
+//                vBoxTaskInProgress.getChildren().remove(checkBox);
+//                CheckBox checkBox1 = new CheckBox(task.getId() + ". " + task.getDescription() + " is done by " + task.getUser().getUsername());
+//                vBoxTaskDone.getChildren().add(checkBox1);
+//                checkBox1.setDisable(true);
+//                task.setTaskDone(true);
+//                taskRepository.save(task);
+////            loadTaskList(null);
+//            });
+//            vBoxTaskInProgress.getChildren().add(checkBox);        }
+//    }
 
     public void loadTaskListInProgress(Event event) {
+        vBoxTaskList.getChildren().clear();
         vBoxTaskAllocated.getChildren().clear();
         vBoxTaskInProgress.getChildren().clear();
         vBoxTaskDone.getChildren().clear();
@@ -422,7 +474,6 @@ public class Controller {
                 });
                 vBoxTaskInProgress.getChildren().add(checkBox);
             } else {
-
                 CheckBox checkBox1 = new CheckBox(task.getDescription() + " " + "is done");
                 vBoxTaskDone.getChildren().add(checkBox1);
                 checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -470,6 +521,9 @@ public class Controller {
             checkDev.setSelected(false);
         }
     }
+
+
+
 }
 
 

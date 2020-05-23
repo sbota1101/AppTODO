@@ -28,9 +28,9 @@
             <items>
                   <CheckMenuItem fx:id="menuItemRegister" mnemonicParsing="false" onAction="#showRegisterPane" text="Register" />
                   <MenuItem fx:id="menuItemLogin" mnemonicParsing="false" onAction="#showLoginPane" text="Login" />
-                  <CheckMenuItem fx:id="menuItemProject" mnemonicParsing="false" onAction="#showProjectPane" text="Project" />
-                  <CheckMenuItem fx:id="menuItemTask" mnemonicParsing="false" onAction="#showTaskPane" text="Task" />
+                  <CheckMenuItem fx:id="menuAllProjects" mnemonicParsing="false" onAction="#loadAllProjects" text="All Projects" />
                   <CheckMenuItem fx:id="menuItemAllTasks" mnemonicParsing="false" onAction="#showAllTasksPane" text="All Tasks" />
+                  <CheckMenuItem fx:id="menuAllSubtask" mnemonicParsing="false" onAction="#loadAllSubtask" text="All Subtasks" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
@@ -69,7 +69,6 @@
                         <Button fx:id="btnlogin" layoutX="339.0" layoutY="349.0" mnemonicParsing="false" onAction="#gotoLogin" prefHeight="31.0" prefWidth="160.0" text="Go to Login" />
                         <CheckBox fx:id="checkAdmin" layoutX="66.0" layoutY="250.0" mnemonicParsing="false" onAction="#admin" text="Administrator" />
                         <CheckBox fx:id="checkDev" layoutX="66.0" layoutY="303.0" mnemonicParsing="false" onAction="#developer" text="Developer" />
-                        <Label fx:id="txtRolle" layoutX="158.0" layoutY="635.0" prefHeight="21.0" prefWidth="395.0" visible="false" />
                      </children>
                   </AnchorPane>
             </content>
@@ -105,6 +104,25 @@
                     </AnchorPane>
                 </content>
             </Tab>
+            <Tab fx:id="tabAddTask" text="Task">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="30.0" layoutY="167.0" text="TODO" textFill="#170503" />
+                        <TextField fx:id="txtFieldTODO" layoutX="106.0" layoutY="162.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
+                        <Button fx:id="btnInsert" layoutX="702.0" layoutY="162.0" mnemonicParsing="false" onAction="#insertTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
+                        <Button fx:id="btnSubTask" layoutX="702.0" layoutY="230.0" mnemonicParsing="false" onAction="#loadSubTask" text="SubTask" />
+                        <ComboBox fx:id="comboProject" layoutX="140.0" layoutY="51.0" onMouseClicked="#loadComboBoxProject" prefHeight="31.0" prefWidth="562.0" />
+                        <Label layoutX="14.0" layoutY="56.0" text="Select Project" />
+                        <ScrollPane layoutX="14.0" layoutY="223.0" prefHeight="480.0" prefWidth="672.0">
+                           <content>
+                              <VBox fx:id="vBoxTasks" prefHeight="553.0" prefWidth="670.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                </AnchorPane>
+              </content>
+            </Tab>
             <Tab fx:id="tabShowProjects" onSelectionChanged="#loadProjects" text="All Projects">
                 <content>
                     <TableView fx:id="tblViewProject" prefHeight="200.0" prefWidth="200.0">
@@ -116,25 +134,6 @@
                         </columns>
                     </TableView>
                 </content></Tab>
-            <Tab fx:id="tabAddTask" text="Task">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Label layoutX="30.0" layoutY="167.0" text="TODO" textFill="#170503" />
-                        <TextField fx:id="txtFieldTODO" layoutX="106.0" layoutY="162.0" onKeyReleased="#insertTaskEnter" prefHeight="31.0" prefWidth="558.0" />
-                        <Button fx:id="btnInsert" layoutX="702.0" layoutY="162.0" mnemonicParsing="false" onAction="#insertTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
-                        <Button fx:id="btnSubTask" layoutX="702.0" layoutY="230.0" mnemonicParsing="false" onAction="#loadSubTask" text="SubTask" />
-                        <ComboBox fx:id="comboProject" layoutX="140.0" layoutY="51.0" prefHeight="31.0" prefWidth="562.0" />
-                        <Label layoutX="14.0" layoutY="56.0" text="Select Project" />
-                        <ScrollPane layoutX="14.0" layoutY="223.0" prefHeight="480.0" prefWidth="672.0">
-                           <content>
-                              <VBox fx:id="vBoxTasks" prefHeight="553.0" prefWidth="670.0" />
-                           </content>
-                        </ScrollPane>
-                     </children>
-                </AnchorPane>
-              </content>
-            </Tab>
           <Tab fx:id="tabShowTasks" onSelectionChanged="#loadTasks" text="All Tasks">
                <content>
                   <TableView fx:id="tblView" prefHeight="200.0" prefWidth="200.0">
@@ -187,7 +186,7 @@
                 <TextField fx:id="txtFieldTODOSubtask" layoutX="113.0" layoutY="176.0" onKeyReleased="#insertSubTaskEnter" prefHeight="31.0" prefWidth="558.0" />
                 <Button fx:id="btnInsertsubtask" layoutX="694.0" layoutY="176.0" mnemonicParsing="false" onAction="#insertSubTask" prefHeight="31.0" prefWidth="60.0" text="-&gt;" />
                         <Label layoutX="33.0" layoutY="74.0" text="Select Task" />
-                        <ComboBox fx:id="comboTask" layoutX="138.0" layoutY="69.0" prefHeight="31.0" prefWidth="572.0" />
+                        <ComboBox fx:id="comboTask" layoutX="138.0" layoutY="69.0" onMousePressed="#loadComboBoxTask" prefHeight="31.0" prefWidth="572.0" />
                         <ScrollPane layoutX="49.0" layoutY="249.0">
                            <content>
                               <VBox fx:id="vBoxSubTask" prefHeight="449.0" prefWidth="679.0" />
